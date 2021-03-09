@@ -98,6 +98,8 @@ render() {
 }
 ```
 
+The following is a summary of the observable types and routing. For more details, see [observables](https://github.com/BrightspaceHypermediaComponents/foundation-engine/tree/master/state/observable) in the [Foundation Engine](https://github.com/BrightspaceHypermediaComponents/foundation-engine).
+
 ### Observable Types
 
 Types are based on Siren's hypermedia format.

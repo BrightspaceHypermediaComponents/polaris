@@ -53,6 +53,8 @@ Components that have not been made fully shareable can be found in the [features
 
 See [Creating new components](creating-new-components.md).
 
+For details on observable properties, see [observables](https://github.com/BrightspaceHypermediaComponents/foundation-engine/tree/master/state/observable) in the [Foundation Engine](https://github.com/BrightspaceHypermediaComponents/foundation-engine).
+
 ## Developing, Testing and Contributing
 
 After cloning the repo, run `npm install` to install dependencies.
