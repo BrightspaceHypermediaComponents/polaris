@@ -71,6 +71,7 @@ class EntitlementRules extends LocalizeDiscoverEntitlement(SkeletonMixin(Hyperme
 				text="${this.localize('text-add-enrollment-rule')}"
 				icon="tier1:lock-locked"></d2l-button-subtle>
 			<d2l-discover-rule-picker-dialog
+				@d2l-discover-rule-created="${this._onRuleCreated}"
 				@d2l-dialog-close="${this._onDialogClose}"
 				href="${this._newRuleHref}"
 				token="${this.token}"
@@ -94,6 +95,10 @@ class EntitlementRules extends LocalizeDiscoverEntitlement(SkeletonMixin(Hyperme
 
 	_onDialogClose() {
 		this._dialogOpened = false;
+	}
+
+	_onRuleCreated() {
+		// todo: add the rule to the list of rules - we need engine support for this to create a pseudo-href
 	}
 
 }

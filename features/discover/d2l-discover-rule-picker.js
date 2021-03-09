@@ -88,8 +88,9 @@ class RulePicker extends LocalizeDiscoverEntitlement(HypermediaStateMixin(RtlMix
 		}
 	}
 
-	reload(newConditions) {
+	async reload(newConditions) {
 		this.conditions = newConditions;
+		await this.updateComplete;
 
 		if (!this.conditions || this.conditions.length === 0) {
 			this._addDefaultCondition();

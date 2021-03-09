@@ -1,5 +1,5 @@
 import '../d2l-discover-rule-picker-dialog.js';
-import { expect, fixture, html } from '@open-wc/testing';
+import { expect, fixture, html, oneEvent } from '@open-wc/testing';
 import { clearStore } from '@brightspace-hmc/foundation-engine/state/HypermediaState.js';
 import { createComponentAndWait } from '../../../test/test-util.js';
 import { default as fetchMock } from 'fetch-mock/esm/client.js';
@@ -7,6 +7,7 @@ import { runConstructor } from '@brightspace-ui/core/tools/constructor-test-help
 import { default as sinon } from 'sinon/pkg/sinon-esm.js';
 
 const selfHref = 'http://rule-2';
+const newEntityHref = 'http://new-rule';
 const actionHref = 'http://rule-update-conditions/result';
 const entity = {
 	actions: [
@@ -33,10 +34,23 @@ const entity = {
 	]
 };
 
+const newEntity = {
+	class: ['rule', 'creating'],
+	actions: [
+		{ name: 'update-conditions', method: 'PATCH', href: actionHref, fields: [
+			{ name: 'conditions', type: 'text' }
+		] }
+	],
+	links: [
+		{ rel: ['self'], href: newEntityHref }
+	]
+};
+
 describe('d2l-discover-rule-picker-dialog', () => {
 
 	before(() => {
-		fetchMock.mock(selfHref, JSON.stringify(entity));
+		fetchMock.mock(selfHref, JSON.stringify(entity))
+			.mock(newEntityHref, JSON.stringify(newEntity));
 	});
 
 	describe('constructor', () => {
@@ -114,6 +128,41 @@ describe('d2l-discover-rule-picker-dialog', () => {
 			};
 			expect(el.conditions).to.deep.equal(rulePicker.conditions);
 			expect(spy.calledWith(expectedCommit)).to.be.true;
+		});
+	});
+
+	describe('rule creation', () => {
+		let el;
+		beforeEach(async() => {
+			el = await createComponentAndWait(html`
+				<d2l-discover-rule-picker-dialog href="${newEntityHref}" token="cake"></d2l-discover-rule-picker-dialog>
+			`);
+			clearStore();
+		});
+		afterEach(() => fetchMock.resetHistory());
+
+		it('throws a rule creation event and resets the dialog when done is pressed', async() => {
+			el.opened = true;
+			await el.updateComplete;
+			const rulePicker = el.shadowRoot.querySelector('d2l-discover-rule-picker');
+			// get the default condition
+			await rulePicker.updateComplete;
+			const defaultCondition = rulePicker.conditions[0];
+			const newCondition = {
+				properties: {
+					type: 'Fruit',
+					value: 'Apple'
+				}
+			};
+			// add a condition to a the rule
+			rulePicker.conditions[0] = newCondition;
+			await rulePicker.updateComplete;
+			const listener = oneEvent(el, 'd2l-discover-rule-created');
+			// click done button
+			el.shadowRoot.querySelector('d2l-button[primary]').click();
+			const { detail } = await listener;
+			expect(detail.conditions[0], 'event has new condition information').to.equal(newCondition);
+			expect(rulePicker.conditions, 'conditions are reset to empty').to.deep.equal([ defaultCondition ]);
 		});
 	});
 
