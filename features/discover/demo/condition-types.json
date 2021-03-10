@@ -3,8 +3,8 @@
     {
       "actions": [{
         "name": "possible-values",
-        "href": "../demo/condition-typea-values.json",
-        "method": "POST"
+        "href": "../features/discover/demo/condition-typea-values.json",
+        "method": "GET"
       }],
       "properties": {
         "type": "conditionTypeA"
@@ -17,8 +17,8 @@
     {
       "actions": [{
         "name": "possible-values",
-        "href": "../demo/condition-typeb-values.json",
-        "method": "POST"
+        "href": "../features/discover/demo/condition-typeb-values.json",
+        "method": "GET"
       }],
       "properties": {
         "type": "conditionTypeB"
