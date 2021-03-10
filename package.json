@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://github.com/BrightspaceHypermediaComponents/foundation-components.git"
   },
-  "version": "0.19.6",
+  "version": "0.20.0",
   "scripts": {
     "lint": "npm run lint:eslint && npm run lint:lit",
     "lint:eslint": "eslint . --ext .js,.html",
