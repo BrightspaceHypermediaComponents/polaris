@@ -2,10 +2,16 @@ import '@brightspace-ui-labs/attribute-picker/attribute-picker.js';
 
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { HypermediaStateMixin, observableTypes } from '@brightspace-hmc/foundation-engine/framework/lit/HypermediaStateMixin.js';
-import { LocalizeDiscoverEntitlement } from './lang/localization.js';
+import { LocalizeDynamicMixin } from '@brightspace-ui/core/mixins/localize-dynamic-mixin.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
-class AttributePicker extends LocalizeDiscoverEntitlement(HypermediaStateMixin(RtlMixin(LitElement))) {
+class AttributePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitElement))) {
+
+	static get localizeConfig() {
+		return {
+			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
+		};
+	}
 
 	static get properties() {
 		return {
