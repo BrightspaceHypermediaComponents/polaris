@@ -1,4 +1,5 @@
-import './d2l-activity-list-item-question.js';
+import '../../../../list/custom/quiz/d2l-activity-list-item-question.js';
+import '../../../../list/custom/quiz/d2l-activity-list-item-section.js';
 
 import { css, LitElement } from 'lit-element/lit-element.js';
 import { HypermediaStateMixin, observableTypes } from '@brightspace-hmc/foundation-engine/framework/lit/HypermediaStateMixin.js';
@@ -33,9 +34,9 @@ const componentClass = class extends HypermediaStateMixin(ListItemMixin(LitEleme
 		return this._renderListItem({
 			//${guard([this._activityHref, this.token], () => html`<d2l-activity-list-item-content href="${this._activityHref}" .token="${this.token}"></d2l-activity-list-item-content>`)}`
 			content: html`${guard([this._activityHref, this.token], () => html`
-			<d2l-activity-list-item-question number="${this.number}" href="${this._activityHref}" .token="${this.token}" points="${this._points}">
+			<d2l-activity-list-item-quiz number="${this.number}" href="${this._activityHref}" .token="${this.token}" points="${this._points}">
 
-			</d2l-activity-list-item-question>`)}`,
+			</d2l-activity-list-item-quiz>`)}`,
 			// actions: html`actions here`
 		});
 	}
