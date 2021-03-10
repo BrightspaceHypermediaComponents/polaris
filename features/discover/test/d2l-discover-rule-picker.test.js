@@ -161,10 +161,10 @@ describe('d2l-discover-rule-picker', () => {
 			el = await createComponentAndWait(html`
 				<d2l-discover-rule-picker href="${emptyEntityHref}" token="cake"></d2l-discover-rule-picker>
 			`);
-			expect(el.conditions[0].properties.type).to.be.undefined;
 
 			const conditionSelect = el.shadowRoot.querySelector('select');
 			const newType = 'Entree';
+			expect(el.conditions[0].properties.type).does.not.equal(newType);
 
 			const listener = oneEvent(conditionSelect, 'blur');
 			conditionSelect.focus();

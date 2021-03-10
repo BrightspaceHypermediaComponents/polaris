@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "npm run lint:eslint && npm run lint:lit",
     "lint:eslint": "eslint . --ext .js,.html",
-    "lint:lit": "lit-analyzer  \"{components,test,demo}/**/*.js\" --strict --rules.no-unknown-tag-name off --rules.no-incompatible-type-binding off --rules.no-unknown-attribute off --rules.no-unknown-property off",
+    "lint:lit": "lit-analyzer  \"{components,demo,features,test}/**/*.js\" --strict --rules.no-unknown-tag-name off --rules.no-incompatible-type-binding off --rules.no-unknown-attribute off --rules.no-unknown-property off",
     "start": "es-dev-server --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
     "test:headless": "karma start --coverage",

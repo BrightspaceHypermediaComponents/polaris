@@ -6,7 +6,7 @@ import './d2l-discover-rule-picker.js';
 
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { HypermediaStateMixin, observableTypes } from '@brightspace-hmc/foundation-engine/framework/lit/HypermediaStateMixin.js';
-import { LocalizeDiscoverEntitlement } from './lang/localization.js';
+import { LocalizeDynamicMixin } from '@brightspace-ui/core/mixins/localize-dynamic-mixin.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
 const rels = Object.freeze({
@@ -14,7 +14,7 @@ const rels = Object.freeze({
 	updateCondions: 'update-conditions',
 });
 
-class RulePickerDialog extends LocalizeDiscoverEntitlement(HypermediaStateMixin(RtlMixin(LitElement))) {
+class RulePickerDialog extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitElement))) {
 	static get properties() {
 		return {
 			opened: { type: Boolean },
@@ -30,6 +30,12 @@ class RulePickerDialog extends LocalizeDiscoverEntitlement(HypermediaStateMixin(
 				height: 100%;
 			}
 		`;
+	}
+
+	static get localizeConfig() {
+		return {
+			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
+		};
 	}
 
 	constructor() {

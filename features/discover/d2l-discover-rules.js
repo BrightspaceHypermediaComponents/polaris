@@ -3,7 +3,7 @@ import './d2l-discover-rule-picker-dialog.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { HypermediaStateMixin, observableTypes } from '@brightspace-hmc/foundation-engine/framework/lit/HypermediaStateMixin.js';
 import { bodySmallStyles } from '@brightspace-ui/core/components/typography/styles.js';
-import { LocalizeDiscoverEntitlement } from './lang/localization.js';
+import { LocalizeDynamicMixin } from '@brightspace-ui/core/mixins/localize-dynamic-mixin.js';
 import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
 
 const rels = Object.freeze({
@@ -14,7 +14,7 @@ const rels = Object.freeze({
 	newRule: 'new-rule'
 });
 
-class EntitlementRules extends LocalizeDiscoverEntitlement(SkeletonMixin(HypermediaStateMixin(LitElement))) {
+class EntitlementRules extends LocalizeDynamicMixin(SkeletonMixin(HypermediaStateMixin(LitElement))) {
 	static get properties() {
 		return {
 			name: { type: String, observable: observableTypes.property },
@@ -43,6 +43,12 @@ class EntitlementRules extends LocalizeDiscoverEntitlement(SkeletonMixin(Hyperme
 				margin-top: 0;
 			}
 		` ];
+	}
+
+	static get localizeConfig() {
+		return {
+			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
+		};
 	}
 
 	constructor() {

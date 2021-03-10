@@ -4,14 +4,20 @@
  */
 import '@brightspace-ui/core/components/button/button.js';
 import { html, LitElement } from 'lit-element/lit-element.js';
-import { LocalizeDiscoverEntitlement } from './lang/localization.js';
+import { LocalizeDynamicMixin } from '@brightspace-ui/core/mixins/localize-dynamic-mixin.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
-class SampleButton extends LocalizeDiscoverEntitlement(RtlMixin(LitElement)) {
+class SampleButton extends LocalizeDynamicMixin(RtlMixin(LitElement)) {
 
 	static get properties() {
 		return {
 			text: { type: String }
+		};
+	}
+
+	static get localizeConfig() {
+		return {
+			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
 		};
 	}
 
