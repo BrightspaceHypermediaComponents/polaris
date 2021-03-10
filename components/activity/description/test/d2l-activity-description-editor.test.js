@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import '../d2l-activity-description-editor.js';
 import { addToMock, mockLink } from '../../../../test/data/fetchMock.js';
-import { assert, elementUpdated, expect, html } from '@open-wc/testing';
+import { assert, elementUpdated, html } from '@open-wc/testing';
 import { createComponentAndWait, delayAndAwaitForElement, fireEventAndWait } from '../../../../test/test-util.js';
 import { learningPathExisting, learningPathMissingAction, learningPathNew, learningPathUpdated } from '../../../../test/data/learningPath.js';
 import { clearStore } from '@brightspace-hmc/foundation-engine/state/HypermediaState.js';
@@ -10,7 +10,7 @@ import sinon from 'sinon/pkg/sinon-esm.js';
 
 // use the learningPathUpdated description as the text when updating textareas
 const updatedDescriptionText = 'updated description text';
-const textAreaLabel = 'textarea';
+const textAreaLabel = 'd2l-input-textarea';
 
 async function _createDescriptionEditor(path) {
 	return await createComponentAndWait(html`<d2l-activity-description-editor href="${path}" token="test-token"></d2l-activity-description-editor>`);
@@ -58,20 +58,6 @@ describe('d2l-activity-description-editor', () => {
 			// paths should be followed
 			assert.isTrue(mockLink.called('path:/learning-path/new'), '/learing-path/new was not called');
 			assert.isTrue(mockLink.called('path:/learning-path/new/object'), '/learing-path/new/object was not called');
-
-			const textarea = element.shadowRoot.querySelector(textAreaLabel);
-
-			// classes are set
-			expect(element.shadowRoot.querySelector('label'))
-				.to.have.class('d2l-input-label', 'Label should have d2l-input-label class');
-			expect(element.shadowRoot.querySelector('label span').className)
-				.to.be.equal('', 'span should have no class');
-			expect(textarea)
-				.to.have.class('d2l-input', 'textarea should have d2l-input class');
-
-			// verify textarea element
-			assert.equal(textarea.getAttribute('placeholder'), 'Write a description', 'Placeholder text does not match');
-			assert.equal(textarea.value, learningPathNew.properties.description, 'textarea value does not match');
 
 			assert.equal(element.description, learningPathNew.properties.description, 'description property should match');
 		});

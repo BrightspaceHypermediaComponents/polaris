@@ -37,6 +37,7 @@ class ActivityEditorFooter extends LocalizeFoundationEditor(HypermediaStateMixin
 				display: flex;
 				justify-content: space-between;
 				max-width: 1230px;
+				padding: 0 1.5rem;
 			}
 			.d2l-activity-editor-save-buttons-visibility {
 				display: inline-block;

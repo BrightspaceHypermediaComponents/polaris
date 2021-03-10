@@ -63,7 +63,7 @@ class ActivityEditorMainCollection extends LocalizeFoundationEditor(SkeletonMixi
 				display: flex;
 				height: 3rem;
 				margin-left: 0rem;
-				margin-right: 0rem;
+				margin-right: -0.8rem;
 				padding: 0 2rem;
 				position: relative;
 				max-width: 1242px;
@@ -73,11 +73,11 @@ class ActivityEditorMainCollection extends LocalizeFoundationEditor(SkeletonMixi
 			}
 			.d2l-activity-collection-no-activity {
 				background-color: var(--d2l-color-regolith);
-				border: solid 1px var(--d2l-color-gypsum);
 				border-radius: 8px;
+				border: solid 1px var(--d2l-color-gypsum);
+				display: block;
 				margin: 1.85rem 0.75rem 1.85rem 1.7rem;
 				padding: 2.1rem 2rem;
-				display: block;
 			}
 		`];
 	}

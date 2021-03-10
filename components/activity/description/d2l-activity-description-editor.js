@@ -1,15 +1,21 @@
-import '../../common/d2l-hc-description.js';
-import '@brightspace-ui/core/components/inputs/input-text.js';
+import '@brightspace-ui/core/components/inputs/input-textarea.js';
 import { css, LitElement } from 'lit-element/lit-element.js';
 import { customHypermediaElement, html } from '@brightspace-hmc/foundation-engine/framework/lit/hypermedia-components.js';
 import { HypermediaStateMixin, observableTypes } from '@brightspace-hmc/foundation-engine/framework/lit/HypermediaStateMixin.js';
-import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId.js';
-import { inputLabelStyles } from '@brightspace-ui/core/components/inputs/input-label-styles.js';
-import { inputStyles } from '@brightspace-ui/core/components/inputs/input-styles.js';
 import { LocalizeFoundationDescription } from './lang/localization.js';
+import ResizeObserver from 'resize-observer-polyfill';
 
 const rels = Object.freeze({
 	specialization: 'https://api.brightspace.com/rels/specialization'
+});
+
+const ro = new ResizeObserver(entries => {
+	entries.forEach(entry => {
+		if (!entry || !entry.target || !entry.target.resizedCallback) {
+			return;
+		}
+		entry.target.resizedCallback(entry.contentRect && entry.contentRect.width);
+	});
 });
 
 class ActivityDescriptionEditor extends LocalizeFoundationDescription(HypermediaStateMixin(LitElement)) {
@@ -19,61 +25,52 @@ class ActivityDescriptionEditor extends LocalizeFoundationDescription(Hypermedia
 			description: { type: String, observable: observableTypes.property, route: [{observable: observableTypes.link, rel: rels.specialization}]},
 			updateDescription: { type: Object, observable: observableTypes.action, name: 'update-description',
 				route: [{observable: observableTypes.link, rel: rels.specialization}]
-			}
+			},
+			_minRowCount: { type: Number }
 		};
 	}
 
 	static get styles() {
-		return [ inputLabelStyles, inputStyles,
-			css`
-				@media (max-width: 615px) {
-					.d2l-activity-description-textfield {
-						height: 5rem;
-					}
-				}
-
-				.d2l-activity-description-editor textarea {
-					height: 100%;
-					left: 0;
-					position: absolute;
-					resize: none;
-					top: 0;
-				}
-				.d2l-activity-description-editor {
-					min-height: 1rem;
-					position: relative;
-				}
-				.d2l-activity-description-textfield {
-					line-height: normal;
-					max-height: 6rem;
-					visibility: hidden;
-				}
-			`
-		];
+		return css`
+			:host {
+				display: block;
+			}
+			:host([hidden]) {
+				display: none;
+			}
+		`;
 	}
 
 	constructor() {
 		super();
-		this._descriptionId = getUniqueId();
+		this._minRowCount = 1;
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		ro.observe(this);
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback();
+		ro.unobserve(this);
 	}
 
 	render() {
-		const lines = (this.description && this.description !== '') ? this.description.split('\n') : [];
-
-		return this._loaded ? html`
-		<label class="d2l-input-label" for="${this._descriptionId}">
-			<span class="">${this.localize('label-description')}</span>
-		</label>
-		<div class="d2l-activity-description-editor">
-			<div class="d2l-activity-description-textfield d2l-input">${lines.map(line => html`${line}<br />`)}</div>
-			<textarea class="d2l-input"
-				.value="${this.description}"
+		return html`
+			<d2l-input-textarea
 				@input="${this._onInputDescription}"
-				id="${this._descriptionId}"
-				placeholder="${this.localize('input-description')}"
-			>${this.description ? this.description : ''}</textarea>
-		</div>
-		` : html`<d2l-input-text label="${this.localize('label-description')}" skeleton></d2l-input-text>`;
+				label="${this.localize('label-description')}"
+				value="${this.description}"
+				rows="${this._minRowCount}"
+				max-rows="5"
+				?skeleton="${!this._loaded}"></d2l-input-textarea>
+			`;
+	}
+
+	resizedCallback(width) {
+		const breakPoint = 726;
+		this._minRowCount = width >= breakPoint ? 1 : 5;
 	}
 
 	_onInputDescription(e) {

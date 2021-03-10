@@ -15,6 +15,7 @@ class ActivityEditorHeader extends HypermediaStateMixin(LitElement) {
 	static get styles() {
 		return css`
 			:host {
+				display: block;
 				padding: 1.25rem 1.5rem 2.25rem 1.5rem;
 			}
 			.d2l-activity-header-content {

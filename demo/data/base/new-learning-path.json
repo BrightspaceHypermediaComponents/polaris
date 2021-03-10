@@ -6,7 +6,7 @@
 		"startDate":null,
 		"endDate":null,
 		"isActive":true,
-		"description":""
+		"description":"TEST"
 	},
 	"entities": [
 		{"class":["richtext",  "description"],  "rel":["item"], "properties":{"text":"", "html":""}},
