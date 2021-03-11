@@ -1,0 +1,31 @@
+{
+  "class":["activity-usage","learning-path","draft-published-entity","draft"],
+  "links":[
+    {
+      "rel":["https://activities.api.brightspace.com/rels/activity-usage","self"],
+      "href":"/demo/data/base/activity-usages/new-learning-path.json"
+    },
+    {
+      "rel":["https://activities.api.brightspace.com/rels/activity-collection"],
+      "href":"/demo/data/base/collection-empty.json"
+    },
+    {
+      "rel":["https://api.brightspace.com/rels/organization","https://api.brightspace.com/rels/specialization"],
+      "href":"/demo/data/base/organizations/new-learning-path.json"
+    }
+  ],
+  "actions": [
+    {
+      "href":"/activity-usage/update/draft",
+      "name":"update-draft",
+      "method":"PATCH",
+      "fields":[{"type":"checkbox","name":"draft","value":true}]
+    },
+    {
+      "href":"/activity-usage/associations",
+      "name":"query-associations",
+      "method":"GET",
+      "fields":[{"type":"text","name":"type"}]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "class":["named-entity","describable-entity","draft-published-entity","draft","creating","learning-path"],
+  "properties":{
+    "name":"Untitled Learning Path",
+    "code":"LP",
+    "startDate":null,
+    "endDate":null,
+    "isActive":false,
+    "description":""
+  },
+  "entities":[
+    {"class":["richtext","description"],"rel":["item"],"properties":{"text":"","html":null}},
+    {"class":["color"],"rel":["https://api.brightspace.com/rels/color"],"properties":{"hexString":"#2f5e00","description":""}},
+    {"class":["course-image"],"rel":["https://api.brightspace.com/rels/organization-image","nofollow"],"href":"https://s.brightspace.com/course-images/images/10054800-f859-4998-8f87-449742d41eb3"},
+    {"class":["relative-uri"],"rel":["item","https://api.brightspace.com/rels/organization-homepage"],"properties":{"path":"/d2l/le/learningpaths/123083/View"}}
+  ],
+  "links":[
+    {
+      "rel":["https://activities.api.brightspace.com/rels/activity-usage"],
+      "href":"/demo/data/base/activity-usages/new-learning-path.json"
+    },
+    {
+      "rel":["self"],
+      "href":"/demo/data/base/organizations/new-learning-path.json"
+    }
+  ],
+  "actions":[
+    {
+      "href":"/organizations/update/name",
+      "name":"update-name",
+      "method":"PATCH",
+      "fields":[{"class":["required"],"type":"text","name":"name","value":"Untitled Learning Path"}]
+      },
+    {
+      "href":"/organizations/update/description",
+      "name":"update-description","method":"PATCH",
+      "fields":[{"class":["required"],"type":"text","name":"description","value":""}]
+    },
+    {
+      "href":"/organizations/update/draft",
+      "name":"update-draft","method":"PATCH",
+      "fields":[{"type":"checkbox","name":"draft","value":true}]
+    },
+    {
+      "href":"/organizations/update/code",
+      "name":"update-code","method":"PATCH",
+      "fields":[{"type":"text","name":"code","value":"LP"}]
+    },
+    {
+      "href":"/organizations/de;ete",
+      "name":"delete",
+      "method":"DELETE"
+    }
+  ]
+}
