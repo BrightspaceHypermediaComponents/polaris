@@ -167,10 +167,10 @@
     ]
   },
   {
-    "name": "QuizCustomCollectionEditor",
-    "source_dir": "components/activity/editor/collection/custom/quiz/lang",
+    "name": "QuizCustomActivityList",
+    "source_dir": "components/activity/list/custom/quiz/lang",
     "source_match": "en\\.js$",
-    "output_file_path": "components/activity/editor/collection/custom/quiz/lang/%LANG%.js",
+    "output_file_path": "components/activity/list/custom/quiz/lang/%LANG%.js",
     "parser_plugin": {
       "plugin": "parse_js"
     },
