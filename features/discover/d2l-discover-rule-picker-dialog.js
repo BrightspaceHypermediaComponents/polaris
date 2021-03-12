@@ -47,6 +47,7 @@ class RulePickerDialog extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixi
 	render() {
 		return html`
 			<d2l-dialog
+				width="845"
 				?opened="${this.opened}"
 				title-text="${this.creating ? this.localize('text-add-enrollment-rule') : this.localize('text-edit-enrollment-rule')}">
 				<div class="d2l-rule-picker-area">${this.localize('text-select-conditions')}</div>

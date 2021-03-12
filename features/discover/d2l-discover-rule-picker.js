@@ -1,7 +1,7 @@
 import '@brightspace-ui/core/components/button/button.js';
 import '@brightspace-ui/core/components/button/button-subtle.js';
 import '@brightspace-ui/core/components/dialog/dialog.js';
-import './d2l-discover-attribute-picker.js'
+import './d2l-discover-attribute-picker.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { HypermediaStateMixin, observableTypes } from '@brightspace-hmc/foundation-engine/framework/lit/HypermediaStateMixin.js';
 import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
@@ -18,6 +18,7 @@ class RulePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitE
 			] },
 			conditions: { type: Array, observable: observableTypes.subEntities, rel: 'condition' },
 			defaultType: { type: String },
+			_conditionTypesHash: { type: Object }
 		};
 	}
 
@@ -30,6 +31,9 @@ class RulePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitE
 					justify-content: center;
 					margin-bottom: 1rem;
 					margin-top: 1rem;
+				}
+				.d2l-picker-rule-container-final {
+					margin-bottom: 6rem;
 				}
 				.d2l-picker-rule-attribute-picker {
 					flex-grow: 1;
@@ -70,6 +74,7 @@ class RulePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitE
 	constructor() {
 		super();
 		this.conditions = [];
+		this._conditionTypesHash = {};
 	}
 
 	render() {
@@ -90,6 +95,9 @@ class RulePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitE
 		super.updated(changedProperties);
 		if (changedProperties.has('conditions') && this.conditions.length === 0) {
 			this._addDefaultCondition();
+		}
+		if (changedProperties.has('conditionTypes')) {
+			this._buildConditionTypeHash();
 		}
 	}
 
@@ -117,6 +125,20 @@ class RulePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitE
 		}));
 	}
 
+	_buildConditionTypeHash() {
+		this._conditionTypesHash = {};
+		this.conditionTypes.forEach(conditionType => {
+			this._conditionTypesHash[conditionType.properties.type] = conditionType;
+		});
+	}
+
+	_getSelectedConditionHref(condition) {
+		if (this._conditionTypesHash[condition.properties.type]) {
+			return this._conditionTypesHash[condition.properties.type].href;
+		}
+		return '';
+	}
+
 	_isLastCondition(condition) {
 		return this.conditions[this.conditions.length - 1] === condition;
 	}
@@ -127,7 +149,11 @@ class RulePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitE
 
 	_onConditionSelectChange(e) {
 		const condition = e.target.condition;
-		condition.properties.type = e.target.value;
+
+		if (condition.properties.type !== e.target.value) {
+			condition.properties.type = e.target.value;
+		}
+
 		this.requestUpdate();
 	}
 
@@ -148,8 +174,8 @@ class RulePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitE
 
 	_renderPickerConditions() {
 		return html`
-		${this.conditions.map((condition,index) => html`
-		<div class="d2l-picker-rule-container">
+		${this.conditions.map((condition, index) => html`
+		<div class="d2l-picker-rule-container ${this.conditions.length - 1 === index ? 'd2l-picker-rule-container-final' : ''}">
 			<select class="d2l-input-select picker-rule-select"
 				aria-label="${this.localize('label-condition-type')}"
 				.condition="${condition}"
@@ -163,9 +189,9 @@ class RulePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitE
 				${this.localize('text-condition-is')}
 			</div>
 			<d2l-discover-attribute-picker
-				href="${this.conditionTypes ? this.conditionTypes[0].href : ''}"
+				href="${this._getSelectedConditionHref(condition)}"
 				.token="${this.token}"
-				class="d2l-picker-rule-input"
+				class="d2l-picker-rule-attribute-picker"
 				.condition="${condition}"
 				@attributes-changed="${this._onConditionValueChange}">
 			</d2l-discover-attribute-picker>

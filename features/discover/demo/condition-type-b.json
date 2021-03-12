@@ -1,0 +1,14 @@
+{
+  "actions": [{
+    "name": "possible-values",
+    "href": "../features/discover/demo/condition-typeb-values.json",
+    "method": "GET"
+  }],
+  "properties": {
+    "type": "conditionTypeB"
+  },
+  "links": [
+    { "rel": ["self"], "href": "../demo/condition-type-b.json" }
+  ],
+  "rel": ["condition-type"]
+}

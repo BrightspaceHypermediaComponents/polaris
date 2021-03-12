@@ -7,19 +7,11 @@ import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
 class AttributePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitElement))) {
 
-	static get localizeConfig() {
-		return {
-			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
-		};
-	}
-
 	static get properties() {
 		return {
 			_getPossibleValues: { observable: observableTypes.summonAction, name: 'possible-values' },
-
-			condition: { type: Object },
 			attributeList: {type: Array },
-			availableAttributes: {type: Array}
+			assignableAttributes: {type: Array}
 		};
 	}
 
@@ -33,11 +25,16 @@ class AttributePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin
 		`;
 	}
 
+	static get localizeConfig() {
+		return {
+			importFunc: async lang => (await import(`./lang/${lang}.js`)).default
+		};
+	}
+
 	constructor() {
 		super();
 		this.attributeList = [];
-		this.availableAttributes = [];
-		this.condition = {};
+		this.assignableAttributes = ['apple', 'banana'];
 	}
 
 	render() {
@@ -47,7 +44,7 @@ class AttributePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin
 				allow-freeform
 				aria-label="${this.localize('label-condition-value')}"
 				.attributeList="${this.attributeList}"
-				.availableAttributes="${this.availableAttributes}"
+				.assignableAttributes="${this.assignableAttributes}"
 				@attributes-changed="${this._onAttributesChanged}">
 			</d2l-labs-attribute-picker>
 		`;
@@ -55,23 +52,17 @@ class AttributePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin
 
 	updated(changedProperties) {
 		super.updated(changedProperties);
-		if (changedProperties.has('condition')) {
-			this.attributeList =  this.condition.properties.values ? this.condition.properties.values : [];
-			this.conditionType = this.condition.properties.values;
-		}
-		if (changedProperties.has('_getPossibleValues')) {
-			this._updatePossibleValues();
-		}
-	}
-
-	async _updatePossibleValues() {
-		const availableAttributes = await this._getPossibleValues.summon();
-		console.log(availableAttributes);
+		changedProperties.forEach((oldValue, propName) => {
+			switch (propName) {
+				case '_getPossibleValues' :
+					this._updatePossibleValues();
+					break;
+			}
+		});
 	}
 
 	_onAttributesChanged(e) {
 		this.attributeList = e.detail.attributeList;
-		this.condition.properties.values = this.attributeList;
 
 		this.dispatchEvent(new CustomEvent('attributes-changed', {
 			bubbles: true,
@@ -80,6 +71,12 @@ class AttributePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin
 				attributeList: this.attributeList
 			}
 		}));
+	}
+
+	async _updatePossibleValues() {
+		this.assignableAttributes = [];
+		const sirenReponse = await this._getPossibleValues.summon();
+		this.assignableAttributes = sirenReponse.properties.values;
 	}
 }
 
