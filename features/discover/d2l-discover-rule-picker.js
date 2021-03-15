@@ -132,7 +132,7 @@ class RulePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitE
 		});
 	}
 
-	_getSelectedConditionHref(condition) {
+	_getConditionTypeHref(condition) {
 		if (this._conditionTypesHash[condition.properties.type]) {
 			return this._conditionTypesHash[condition.properties.type].href;
 		}
@@ -189,8 +189,9 @@ class RulePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin(LitE
 				${this.localize('text-condition-is')}
 			</div>
 			<d2l-discover-attribute-picker
-				href="${this._getSelectedConditionHref(condition)}"
+				href="${this._getConditionTypeHref(condition)}"
 				.token="${this.token}"
+				.attributeList="${condition.properties.values}"
 				class="d2l-picker-rule-attribute-picker"
 				.condition="${condition}"
 				@attributes-changed="${this._onConditionValueChange}">

@@ -37,7 +37,7 @@
   "dependencies": {
     "@brightspace-hmc/foundation-engine": "github:BrightspaceHypermediaComponents/foundation-engine#semver:^0",
     "@brightspace-ui-labs/accordion": "^2.4.2",
-    "@brightspace-ui-labs/attribute-picker": "^1.0.5",
+    "@brightspace-ui-labs/attribute-picker": "^1.0.6",
     "@brightspace-ui-labs/caketray": "^1",
     "@brightspace-ui-labs/checkbox-drawer": "github:BrightspaceUILabs/checkbox-drawer#semver:^1",
     "@brightspace-ui-labs/list-item-accumulator": "^1",

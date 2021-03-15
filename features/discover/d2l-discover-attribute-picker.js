@@ -10,8 +10,8 @@ class AttributePicker extends LocalizeDynamicMixin(HypermediaStateMixin(RtlMixin
 	static get properties() {
 		return {
 			_getPossibleValues: { observable: observableTypes.summonAction, name: 'possible-values' },
-			attributeList: {type: Array },
-			assignableAttributes: {type: Array}
+			attributeList: { type: Array },
+			assignableAttributes: { type: Array }
 		};
 	}
 

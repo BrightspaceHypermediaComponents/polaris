@@ -11,15 +11,15 @@ const entity = {
 	entities: [
 		{
 			rel: ['condition'],
-			properties: { type: 'Fruit', value: 'Banana' }
+			properties: { type: 'Fruit', values: ['Banana'] }
 		},
 		{
 			rel: ['condition'],
-			properties: { type: 'Fruit', value: 'Orange' }
+			properties: { type: 'Fruit', values: ['Orange'] }
 		},
 		{
 			rel: ['condition'],
-			properties: { type: 'Entree', value: 'Cake' }
+			properties: { type: 'Entree', values: ['Cake'] }
 		}
 	],
 	links: [
@@ -85,10 +85,10 @@ describe('d2l-discover-rule-picker', () => {
 			`);
 
 			const conditionDropdown = el.shadowRoot.querySelector('select');
-			const conditionInput = el.shadowRoot.querySelector('d2l-input-text');
+			const conditionPicker = el.shadowRoot.querySelector('d2l-discover-attribute-picker');
 
 			expect(conditionDropdown).to.not.be.null;
-			expect(conditionInput).to.not.be.null;
+			expect(conditionPicker).to.not.be.null;
 			expect(conditionDropdown.options.length).to.equal(conditionTypesEntity.entities.length);
 
 			expect(Array.from(conditionDropdown.options).map(option => option.value))
@@ -100,15 +100,15 @@ describe('d2l-discover-rule-picker', () => {
 				<d2l-discover-rule-picker href="${selfHref}" token="cake"></d2l-discover-rule-picker>
 			`);
 			const conditionDropdownList = el.shadowRoot.querySelectorAll('select');
-			const conditionInputList = el.shadowRoot.querySelectorAll('d2l-input-text');
+			const conditionPickerList = el.shadowRoot.querySelectorAll('d2l-discover-attribute-picker');
 
 			expect(conditionDropdownList.length).to.equal(entity.entities.length);
-			expect(conditionInputList.length).to.equal(entity.entities.length);
+			expect(conditionPickerList.length).to.equal(entity.entities.length);
 
 			//Ensure the data in the fields lines up with the passed data
 			for (let i = 0 ; i < conditionDropdownList.options; i++) {
 				expect(conditionDropdownList[i].value).to.equal(entity.entities[i].properties.type);
-				expect(conditionInputList[i].value).to.equal(entity.entities[i].properties.value);
+				expect(conditionPickerList[i].value).to.equal(entity.entities[i].properties.value);
 			}
 		});
 
@@ -118,10 +118,10 @@ describe('d2l-discover-rule-picker', () => {
 			`);
 
 			const conditionDropdownList = el.shadowRoot.querySelectorAll('select');
-			const conditionInputList = el.shadowRoot.querySelectorAll('d2l-input-text');
+			const conditionPickerList = el.shadowRoot.querySelectorAll('d2l-discover-attribute-picker');
 
 			expect(conditionDropdownList.length).to.equal(1);
-			expect(conditionInputList.length).to.equal(1);
+			expect(conditionPickerList.length).to.equal(1);
 		});
 	});
 
@@ -137,24 +137,26 @@ describe('d2l-discover-rule-picker', () => {
 			await el.updateComplete;
 
 			const conditionDropdownList = el.shadowRoot.querySelectorAll('select');
-			const conditionInputList = el.shadowRoot.querySelectorAll('d2l-input-text');
+			const conditionPickerList = el.shadowRoot.querySelectorAll('d2l-discover-attribute-picker');
 			expect(conditionDropdownList.length).to.equal(4);
-			expect(conditionInputList.length).to.equal(4);
+			expect(conditionPickerList.length).to.equal(4);
 		});
 
-		it('updates the condition information when the combo is modified and loses focus', async() => {
-			const conditionD2LInput = el.shadowRoot.querySelector('d2l-input-text');
-			await conditionD2LInput.updateComplete;
-			const conditionInput = conditionD2LInput.shadowRoot.querySelector('input');
+		it('updates the condition information when the user enters a new attribute', async() => {
+			const foundationD2LPicker = el.shadowRoot.querySelector('d2l-discover-attribute-picker');
+			await foundationD2LPicker.updateComplete;
+			const conditionD2LPicker = foundationD2LPicker.shadowRoot.querySelector('d2l-labs-attribute-picker');
+			await conditionD2LPicker.updateComplete;
+			const conditionInput = conditionD2LPicker.shadowRoot.querySelector('input');
 
-			const listener = oneEvent(conditionInput, 'blur');
+			const listener = oneEvent(foundationD2LPicker, 'attributes-changed');
 			conditionInput.focus();
-			conditionD2LInput.value = 'Zebra';
-			conditionInput.blur();
-
+			conditionD2LPicker._text = 'Zebra';
+			conditionInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
 			await listener;
 
-			expect(el.conditions[0].properties.value).to.equal('Zebra');
+			expect(el.conditions[0].properties.values[0]).to.equal('Banana');
+			expect(el.conditions[0].properties.values[1]).to.equal('Zebra');
 		});
 
 		it('updates the condition information when the input field is modified', async() => {
@@ -212,14 +214,15 @@ describe('d2l-discover-rule-picker', () => {
 				deleteButtonList[test.index].click();
 				await el.updateComplete;
 				const conditionDropdownList = el.shadowRoot.querySelectorAll('select');
-				const conditionInputList = el.shadowRoot.querySelectorAll('d2l-input-text');
+				const conditionPickerList = el.shadowRoot.querySelectorAll('d2l-discover-attribute-picker');
+				await conditionPickerList.updateComplete;
 
 				expect(el.conditions.length).to.equal(newConditions.length);
 				expect(el.conditions).to.deep.equal(newConditions);
 				for (let i = 0 ; i < el.conditions.length; i++) {
 					//Ensure user facing data matches expected results
 					expect(conditionDropdownList[i].value).to.equal(newConditions[i].properties.type);
-					expect(conditionInputList[i].value).to.equal(newConditions[i].properties.value);
+					expect(conditionPickerList[i].attributeList).to.equal(newConditions[i].properties.values);
 				}
 			});
 		}
