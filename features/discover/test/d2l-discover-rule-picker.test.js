@@ -147,12 +147,9 @@ describe('d2l-discover-rule-picker', () => {
 			await foundationD2LPicker.updateComplete;
 			const conditionD2LPicker = foundationD2LPicker.shadowRoot.querySelector('d2l-labs-attribute-picker');
 			await conditionD2LPicker.updateComplete;
-			const conditionInput = conditionD2LPicker.shadowRoot.querySelector('input');
 
 			const listener = oneEvent(foundationD2LPicker, 'attributes-changed');
-			conditionInput.focus();
-			conditionD2LPicker._text = 'Zebra';
-			conditionInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 }));
+			conditionD2LPicker._addAttribute('Zebra');
 			await listener;
 
 			expect(el.conditions[0].properties.values[0]).to.equal('Banana');
