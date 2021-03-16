@@ -142,9 +142,12 @@ describe('d2l-discover-rule-picker', () => {
 			expect(conditionPickerList.length).to.equal(4);
 		});
 
-		it('updates the condition information when the user enters a new attribute', async() => {
+		it('updates the condition information when a new attribute is added', async() => {
 			await el.updateComplete;
-			expect(el).to.not.be.null;
+			const discoverPickerList = el.shadowRoot.querySelectorAll('d2l-discover-attribute-picker');
+			await discoverPickerList.updateComplete;
+			const conditionPickerList = discoverPickerList.shadowRoot.querySelector('d2l-discover-attribute-picker');
+			expect(conditionPickerList).to.not.be.null;
 		});
 
 		it('updates the condition information when the input field is modified', async() => {
